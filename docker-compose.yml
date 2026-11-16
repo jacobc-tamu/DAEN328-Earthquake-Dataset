@@ -1,0 +1,57 @@
+services:
+  db:
+    image: postgres:16
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-EarthquakeDB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      retries: 20
+
+  extract:
+    build: ./1_extract
+    volumes:
+      - ./data:/app/data
+
+  transform:
+    build: ./2_transform
+    depends_on:
+      extract:
+        condition: service_completed_successfully
+    volumes:
+      - ./data:/app/data
+
+  load:
+    build: ./3_load
+    depends_on:
+      transform:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data:ro
+
+  app:
+    build: ./4_app
+    depends_on:
+      load:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - ./4_app:/app
+    ports:
+      - "8501:8501"
+
+volumes:
+  pgdata:

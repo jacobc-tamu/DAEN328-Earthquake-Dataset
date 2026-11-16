@@ -1,0 +1,5 @@
+.env
+venv/
+*.csv
+earthquakes_progress.txt
+__pycache__/

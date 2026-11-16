@@ -1,0 +1,3 @@
+# Python packages go here, one on each line
+pandas==2.2.3
+numpy==2.1.3

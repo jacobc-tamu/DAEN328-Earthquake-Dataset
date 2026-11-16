@@ -1,0 +1,2 @@
+# Python packages go here, one on each line
+requests==2.32.3
