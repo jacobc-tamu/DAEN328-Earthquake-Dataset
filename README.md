@@ -32,10 +32,10 @@
    copy .env.sample .env        # Windows
    cp .env.sample .env          # Mac / Linux
    ```
-   Open `.env` and fill in your own database username and password. Keep `POSTGRES_HOST=db`, which is the name of the database service in `docker-compose.yml`.
+   Open `.env` and fill in your own database username and password. Keep `POSTGRES_HOST=db`, which is the name of the database service in `docker compose.yml`.
 3. **Build with Docker**
    ```
-   docker-compose up --build
+   docker compose up --build
    ```
    This will
    1. start PostgreSQL with an empty database,
@@ -50,11 +50,11 @@ The first run pulls the full 2006-to-present dataset and can take several minute
 Stop the stack and start it a second time:
 
 ```
-docker-compose down
-docker-compose up --build
+docker compose down
+docker compose up --build
 ```
 
-`docker-compose down` keeps the database volume. The second run pulls only new or changed records and creates no duplicate rows. For a complete restart, delete the volume with `docker-compose down -v`.
+`docker compose down` keeps the database volume. The second run pulls only new or changed records and creates no duplicate rows. For a complete restart, delete the volume with `docker compose down -v`.
 
 
 ### Environment variables
